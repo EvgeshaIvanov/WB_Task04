@@ -1,6 +1,5 @@
 package com.example.mychats.data
 
-import androidx.lifecycle.MutableLiveData
 import com.example.mychats.domain.ChatData
 import com.example.mychats.domain.ChatsRepository
 import com.github.javafaker.Faker
@@ -8,7 +7,7 @@ import kotlin.random.Random
 
 object ChatsRepositoryImpl : ChatsRepository {
 
-    private val faker = Faker.instance()
+    private val faker: Faker = Faker.instance()
 
     private val IMAGES = mutableListOf(
         "https://images.unsplash.com/photo-1600267185393-e158a98703de?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218fHx8fHx8fHwxNjI0MDE0NjQ0&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=800",
@@ -24,14 +23,15 @@ object ChatsRepositoryImpl : ChatsRepository {
     )
 
     private var chats = mutableListOf<ChatData>()
-
+    private var autoIncrementId = 0
     init {
         IMAGES.shuffle()
         chats = (1..20).map { ChatData(
             name = faker.name().firstName(),
             message = faker.company().profession(),
             photo = IMAGES[it % IMAGES.size],
-            read = Random.nextBoolean()
+            readState = Random.nextBoolean(),
+            id = autoIncrementId++
         ) }.toMutableList()
 
     }
@@ -40,18 +40,35 @@ object ChatsRepositoryImpl : ChatsRepository {
         return chats.toList()
     }
 
-    override fun clearChats(list: MutableLiveData<List<ChatData>>) {
-        chats.clear()
-    }
-
-    override fun addNewChat(chatData: ChatData) {
-        chats.add( ChatData(
+    override fun addNewChat(): List<ChatData> {
+        val chat = ChatData(
             name = faker.name().firstName(),
             message = faker.company().profession(),
-            photo = IMAGES[2],
-            read = Random.nextBoolean()
+            photo = IMAGES[(0..9).random()],
+            readState = false,
+            id = autoIncrementId++
         )
-        )
+        chats.add(0, chat)
+        return chats
+    }
+
+    override fun addSomeNewChats(): List<ChatData> {
+        for (el in chats){
+            val chat = ChatData(
+                name = faker.name().firstName(),
+                message = faker.company().profession(),
+                photo = IMAGES[(0..9).random()],
+                readState = false,
+                id = (1..20).random()
+            )
+            chats.add(chat)
+        }
+        return chats
+    }
+
+    override fun deleteChat(chatData: ChatData) {
+        autoIncrementId--
+        chats.remove(chatData)
     }
 
 

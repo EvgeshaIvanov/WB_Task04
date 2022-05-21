@@ -1,33 +1,33 @@
 package com.example.mychats.presentation
 
 import android.annotation.SuppressLint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.mychats.R
 import com.example.mychats.databinding.ItemListBinding
-import com.example.mychats.databinding.ItemListNewMessageBinding
 import com.example.mychats.domain.ChatData
 import java.lang.RuntimeException
 
 class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatViewHolder>() {
 
+    var count = 0
     var chats = listOf<ChatData>()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
+            val callback = ChatsDiffCallback(chats, value)
+            val diffResult = DiffUtil.calculateDiff(callback)
+            diffResult.dispatchUpdatesTo(this)
             field = value
-            notifyDataSetChanged()
         }
 
-
+    var onChatClickListener: ((ChatData) -> Unit)? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
-        val layout = when(viewType){
-            VIEW_TYPE_DISABLED -> R.layout.item_list
-            VIEW_TYPE_ENABLE -> R.layout.item_list_new_message
-            else -> throw RuntimeException("Unknown view type: $viewType")
-        }
+
         val inflater = LayoutInflater.from(parent.context)
         val binding = ItemListBinding.inflate(inflater, parent, false)
 
@@ -36,6 +36,7 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatViewHolder>() {
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         val chat = chats[position]
+        Log.i("Size", "${++count}")
         with(holder.binding) {
             nameView.text = chat.name
             messageView.text = chat.message
@@ -50,11 +51,13 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatViewHolder>() {
                 Glide.with(avatarImage.context).clear(avatarImage)
                 avatarImage.setImageResource(R.drawable.ic_launcher_foreground)
             }
-            if (chat.read) {
+            if (!chat.readState) {
                 newMessageNotification.visibility = View.VISIBLE
             }
             chatView.setOnClickListener {
                 newMessageNotification.visibility = View.GONE
+                Log.i("My Position", it.toString())
+                onChatClickListener?.invoke(chat)
             }
         }
     }
@@ -62,7 +65,7 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatViewHolder>() {
     override fun getItemViewType(position: Int): Int {
         val item = chats[position]
 
-        return if (item.read) {
+        return if (item.readState) {
             VIEW_TYPE_ENABLE
         } else {
             VIEW_TYPE_DISABLED
@@ -72,6 +75,7 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatViewHolder>() {
 
     override fun getItemCount(): Int {
         return chats.size
+
     }
 
     class ChatViewHolder(val binding: ItemListBinding) : RecyclerView.ViewHolder(binding.root)

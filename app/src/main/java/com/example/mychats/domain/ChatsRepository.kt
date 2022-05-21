@@ -6,8 +6,10 @@ interface ChatsRepository {
 
     fun getChats(): List<ChatData>
 
-    fun clearChats(list: MutableLiveData<List<ChatData>>)
+    fun addNewChat(): List<ChatData>
 
-    fun addNewChat(chatData: ChatData)
+    fun addSomeNewChats(): List<ChatData>
+
+    fun deleteChat(chatData: ChatData)
 
 }

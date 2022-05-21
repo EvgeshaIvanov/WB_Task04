@@ -3,19 +3,19 @@ package com.example.mychats.presentation
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.mychats.data.ChatsRepositoryImpl
-import com.example.mychats.domain.AddNewChatUseCase
-import com.example.mychats.domain.ChatData
-import com.example.mychats.domain.GetChatsUseCase
-import com.example.mychats.domain.GetClearChatsUseCase
+import com.example.mychats.domain.*
 
 class MainViewModel : ViewModel() {
 
     private val repository = ChatsRepositoryImpl
 
     private val getChatsUseCase = GetChatsUseCase(repository)
-    private val getClearChatsUseCase = GetClearChatsUseCase(repository)
+
     private val addNewChatUseCase = AddNewChatUseCase(repository)
 
+    private val addNewChatsUseCase = AddSomeNewChatsUseCase(repository)
+
+    private val deleteChatUseCase = DeleteChatUseCase(repository)
 
      val chatList = MutableLiveData<List<ChatData>>()
 
@@ -24,12 +24,19 @@ class MainViewModel : ViewModel() {
         chatList.value = list
     }
 
-    fun getClearChats(){
-        getClearChatsUseCase.clearChats(chatList)
+    fun addNewChat(){
+        val list = addNewChatUseCase.addNewChat()
+        chatList.value = list
     }
 
-    fun addNewChatUseCase(){
-        TODO()
+    fun addSomeNewChats(){
+        val list = addNewChatsUseCase.addSomeNewChats()
+        chatList.value = list
+    }
+
+    fun deleteChat(chatData: ChatData){
+        deleteChatUseCase.deleteChat(chatData)
+        getChats()
     }
 
 }
