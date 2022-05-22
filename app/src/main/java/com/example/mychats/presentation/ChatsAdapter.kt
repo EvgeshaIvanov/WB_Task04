@@ -1,31 +1,20 @@
 package com.example.mychats.presentation
 
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.ListAdapter
 import com.bumptech.glide.Glide
 import com.example.mychats.R
 import com.example.mychats.databinding.ItemListBinding
 import com.example.mychats.domain.ChatData
-import java.lang.RuntimeException
 
-class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatViewHolder>() {
-
-    var count = 0
-    var chats = listOf<ChatData>()
-        @SuppressLint("NotifyDataSetChanged")
-        set(value) {
-            val callback = ChatsDiffCallback(chats, value)
-            val diffResult = DiffUtil.calculateDiff(callback)
-            diffResult.dispatchUpdatesTo(this)
-            field = value
-        }
+class ChatsAdapter : ListAdapter<ChatData, ChatViewHolder>(ChatsItemDiffCallback()) {
 
     var onChatClickListener: ((ChatData) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatViewHolder {
 
         val inflater = LayoutInflater.from(parent.context)
@@ -35,8 +24,14 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
-        val chat = chats[position]
-        Log.i("Size", "${++count}")
+        val chat = getItem(position)
+        bind(holder, chat)
+    }
+
+    private fun bind(
+        holder: ChatViewHolder,
+        chat: ChatData
+    ) {
         with(holder.binding) {
             nameView.text = chat.name
             messageView.text = chat.message
@@ -63,22 +58,15 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatViewHolder>() {
     }
 
     override fun getItemViewType(position: Int): Int {
-        val item = chats[position]
+        val item = getItem(position)
 
         return if (item.readState) {
             VIEW_TYPE_ENABLE
         } else {
             VIEW_TYPE_DISABLED
         }
-
     }
 
-    override fun getItemCount(): Int {
-        return chats.size
-
-    }
-
-    class ChatViewHolder(val binding: ItemListBinding) : RecyclerView.ViewHolder(binding.root)
 
     companion object {
         const val VIEW_TYPE_ENABLE = 100

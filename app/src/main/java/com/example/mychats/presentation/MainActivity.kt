@@ -1,5 +1,6 @@
 package com.example.mychats.presentation
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mychats.R
 import com.example.mychats.databinding.ActivityMainBinding
+import com.example.mychats.presentation.DialogActivity.Companion.EXTRA_SCREEN_MODE
+import com.example.mychats.presentation.DialogActivity.Companion.MESSAGE
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,15 +29,22 @@ class MainActivity : AppCompatActivity() {
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.chatList.observe(this) {
-            chatsAdapter.chats = it
-            Log.i("My Logs", it.toString())
+            chatsAdapter.submitList(it)
+
+            Log.i("Test", it.toString())
+        }
+
+        binding.pullToRefresh.setOnRefreshListener {
+            binding.pullToRefresh.isRefreshing = false
+
+            viewModel.addNewChat()
+
+            binding.recyclerView.smoothScrollToPosition(0)
+            //todo возвращать в начало лист
+
         }
         viewModel.getChats()
 
-        binding.pullToRefresh.setOnRefreshListener {
-            viewModel.addNewChat()
-            binding.pullToRefresh.isRefreshing = false
-        }
 
     }
 
@@ -66,9 +76,8 @@ class MainActivity : AppCompatActivity() {
             ): Boolean {
                 return false
             }
-
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-                val item = chatsAdapter.chats[viewHolder.absoluteAdapterPosition]
+                val item = chatsAdapter.currentList[viewHolder.absoluteAdapterPosition]
                 viewModel.deleteChat(item)
             }
         }
@@ -78,6 +87,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListener() {
         chatsAdapter.onChatClickListener = {
+            val intent = Intent(this, DialogActivity::class.java)
+            intent.putExtra(EXTRA_SCREEN_MODE, "name - ${it.id}, ${it.name}, ${it.message}")
+            startActivity(intent)
             Log.i("Main", it.toString())
         }
     }
@@ -88,7 +100,7 @@ class MainActivity : AppCompatActivity() {
                 super.onScrollStateChanged(recyclerView, newState)
                 if (!binding.recyclerView.canScrollVertically(SCROLL_DOWN) && newState == RecyclerView.SCROLL_STATE_IDLE) {
                     Log.i("MyLog", "Дошли до конца")
-                    //viewModel.addSomeNewChats()
+                    viewModel.addSomeNewChats()
                 }
             }
         })

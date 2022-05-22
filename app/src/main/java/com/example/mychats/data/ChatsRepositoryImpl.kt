@@ -1,13 +1,18 @@
 package com.example.mychats.data
 
+import android.os.Build
 import com.example.mychats.domain.ChatData
 import com.example.mychats.domain.ChatsRepository
+import com.example.mychats.domain.MessagesRepository
 import com.github.javafaker.Faker
+import java.time.LocalTime
 import kotlin.random.Random
 
-object ChatsRepositoryImpl : ChatsRepository {
+object ChatsRepositoryImpl : ChatsRepository, MessagesRepository {
 
     private val faker: Faker = Faker.instance()
+
+    private var dialog = mutableListOf<ChatData>()
 
     private val IMAGES = mutableListOf(
         "https://images.unsplash.com/photo-1600267185393-e158a98703de?crop=entropy&cs=tinysrgb&fit=crop&fm=jpg&h=600&ixid=MnwxfDB8MXxyYW5kb218fHx8fHx8fHwxNjI0MDE0NjQ0&ixlib=rb-1.2.1&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=800",
@@ -23,16 +28,28 @@ object ChatsRepositoryImpl : ChatsRepository {
     )
 
     private var chats = mutableListOf<ChatData>()
+
     private var autoIncrementId = 0
     init {
         IMAGES.shuffle()
-        chats = (1..20).map { ChatData(
+        chats = (0..10).map { ChatData(
             name = faker.name().firstName(),
             message = faker.company().profession(),
             photo = IMAGES[it % IMAGES.size],
             readState = Random.nextBoolean(),
             id = autoIncrementId++
         ) }.toMutableList()
+
+        dialog = (0..10).map {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                ChatData(
+                    message = "Hello",
+                    time = LocalTime.NOON.toString()
+                )
+            } else {
+                throw Throwable("WRONG TIME!")
+            }
+        }.toMutableList()
 
     }
 
@@ -53,22 +70,27 @@ object ChatsRepositoryImpl : ChatsRepository {
     }
 
     override fun addSomeNewChats(): List<ChatData> {
-        for (el in chats){
+        for (el in 0..10){
             val chat = ChatData(
                 name = faker.name().firstName(),
                 message = faker.company().profession(),
                 photo = IMAGES[(0..9).random()],
-                readState = false,
-                id = (1..20).random()
+                readState = true,
+                id = autoIncrementId++
             )
             chats.add(chat)
         }
+        getChats()
         return chats
     }
 
     override fun deleteChat(chatData: ChatData) {
         autoIncrementId--
         chats.remove(chatData)
+    }
+
+    override fun getMessages(): List<ChatData> {
+        return dialog.toList()
     }
 
 

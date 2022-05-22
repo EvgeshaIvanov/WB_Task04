@@ -17,26 +17,31 @@ class MainViewModel : ViewModel() {
 
     private val deleteChatUseCase = DeleteChatUseCase(repository)
 
-     val chatList = MutableLiveData<List<ChatData>>()
+
+    val chatList = MutableLiveData<List<ChatData>>()
 
     fun getChats() {
         val list = getChatsUseCase.getChats()
         chatList.value = list
     }
 
-    fun addNewChat(){
+    fun addNewChat() {
         val list = addNewChatUseCase.addNewChat()
         chatList.value = list
+        getChats()
     }
 
-    fun addSomeNewChats(){
+    fun addSomeNewChats() {
         val list = addNewChatsUseCase.addSomeNewChats()
         chatList.value = list
+        getChats()
     }
 
-    fun deleteChat(chatData: ChatData){
+    fun deleteChat(chatData: ChatData) {
         deleteChatUseCase.deleteChat(chatData)
         getChats()
     }
+
+
 
 }
