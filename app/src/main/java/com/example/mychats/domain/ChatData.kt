@@ -5,9 +5,10 @@ data class ChatData(
     val name: String = "",
     val message: String = "",
     val photo: String = "",
-    val readState: Boolean = false,
+    var readState: Boolean = true,
     var text: String = "",
-    var time: String = ""
+    var time: String = "",
+    var userMessage: Boolean = false
 ){
     companion object{
         const val UNDEFINED_ID = -1

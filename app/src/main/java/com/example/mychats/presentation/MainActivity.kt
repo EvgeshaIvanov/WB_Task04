@@ -8,14 +8,14 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mychats.R
 import com.example.mychats.databinding.ActivityMainBinding
-import com.example.mychats.presentation.DialogActivity.Companion.EXTRA_SCREEN_MODE
-import com.example.mychats.presentation.DialogActivity.Companion.MESSAGE
 
 
 class MainActivity : AppCompatActivity() {
+    /*
+    TODO 1) добавить удаление сообщений (думаю через удерживание)
 
+     */
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var chatsAdapter: ChatsAdapter
@@ -30,17 +30,15 @@ class MainActivity : AppCompatActivity() {
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.chatList.observe(this) {
             chatsAdapter.submitList(it)
-
-            Log.i("Test", it.toString())
         }
 
         binding.pullToRefresh.setOnRefreshListener {
+
             binding.pullToRefresh.isRefreshing = false
 
             viewModel.addNewChat()
 
             binding.recyclerView.smoothScrollToPosition(0)
-            //todo возвращать в начало лист
 
         }
         viewModel.getChats()
@@ -76,6 +74,7 @@ class MainActivity : AppCompatActivity() {
             ): Boolean {
                 return false
             }
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val item = chatsAdapter.currentList[viewHolder.absoluteAdapterPosition]
                 viewModel.deleteChat(item)
@@ -88,9 +87,11 @@ class MainActivity : AppCompatActivity() {
     private fun setupClickListener() {
         chatsAdapter.onChatClickListener = {
             val intent = Intent(this, DialogActivity::class.java)
-            intent.putExtra(EXTRA_SCREEN_MODE, "name - ${it.id}, ${it.name}, ${it.message}")
+            intent.putExtra("user_name", it.name)
+            intent.putExtra("user_photo", it.photo)
+            intent.putExtra("id_user", it.id)
             startActivity(intent)
-            Log.i("Main", it.toString())
+            Log.i("intent_info_about_user", it.toString())
         }
     }
 

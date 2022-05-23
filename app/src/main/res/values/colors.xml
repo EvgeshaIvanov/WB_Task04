@@ -8,4 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#63FFFFFF</color>
+    <color name="telegramm_your_message">#766ac8</color>
+    <color name="telegramm_user_message">#333333</color>
+
 </resources>

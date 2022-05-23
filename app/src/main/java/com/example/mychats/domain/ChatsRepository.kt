@@ -1,7 +1,5 @@
 package com.example.mychats.domain
 
-import androidx.lifecycle.MutableLiveData
-
 interface ChatsRepository {
 
     fun getChats(): List<ChatData>
@@ -11,5 +9,11 @@ interface ChatsRepository {
     fun addSomeNewChats(): List<ChatData>
 
     fun deleteChat(chatData: ChatData)
+
+    fun getMessages(): List<ChatData>
+
+    fun sendMessage(text: String): List<ChatData>
+
+    fun addSomeMessages(): List<ChatData>
 
 }

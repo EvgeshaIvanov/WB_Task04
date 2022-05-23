@@ -1,7 +1,5 @@
 package com.example.mychats.presentation
 
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,6 +23,7 @@ class ChatsAdapter : ListAdapter<ChatData, ChatViewHolder>(ChatsItemDiffCallback
 
     override fun onBindViewHolder(holder: ChatViewHolder, position: Int) {
         val chat = getItem(position)
+
         bind(holder, chat)
     }
 
@@ -47,11 +46,12 @@ class ChatsAdapter : ListAdapter<ChatData, ChatViewHolder>(ChatsItemDiffCallback
                 avatarImage.setImageResource(R.drawable.ic_launcher_foreground)
             }
             if (!chat.readState) {
+                nameView.typeface.isItalic
                 newMessageNotification.visibility = View.VISIBLE
             }
             chatView.setOnClickListener {
+                chat.readState = true
                 newMessageNotification.visibility = View.GONE
-                Log.i("My Position", it.toString())
                 onChatClickListener?.invoke(chat)
             }
         }
