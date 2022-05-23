@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MyChats</string>
+    <string name="user_status_string">был(а) в сети недавно</string>
+    <string name="user_string_info">User</string>
 </resources>

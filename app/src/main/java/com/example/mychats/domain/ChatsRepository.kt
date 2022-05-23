@@ -12,4 +12,10 @@ interface ChatsRepository {
 
     fun deleteChat(chatData: ChatData)
 
+    fun getMessages(): List<ChatData>
+
+    fun sendMessage(text: String): List<ChatData>
+
+    fun addSomeMessages(): List<ChatData>
+
 }

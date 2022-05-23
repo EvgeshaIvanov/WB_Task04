@@ -35,12 +35,12 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.pullToRefresh.setOnRefreshListener {
+
             binding.pullToRefresh.isRefreshing = false
 
             viewModel.addNewChat()
 
             binding.recyclerView.smoothScrollToPosition(0)
-            //todo возвращать в начало лист
 
         }
         viewModel.getChats()
@@ -88,7 +88,8 @@ class MainActivity : AppCompatActivity() {
     private fun setupClickListener() {
         chatsAdapter.onChatClickListener = {
             val intent = Intent(this, DialogActivity::class.java)
-            intent.putExtra(EXTRA_SCREEN_MODE, "name - ${it.id}, ${it.name}, ${it.message}")
+            intent.putExtra("user_name", it.name)
+            intent.putExtra("user_photo", it.photo)
             startActivity(intent)
             Log.i("Main", it.toString())
         }

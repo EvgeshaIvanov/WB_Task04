@@ -3,10 +3,12 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/most1/AndroidStudioProjects/MyChats/app/src/main/res/layout/activity_dialog.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/most1/AndroidStudioProjects/MyChats/app/src/main/res/drawable/custom_card_view.xml" value="0.3095" />
+        <entry key="..\:/Users/most1/AndroidStudioProjects/MyChats/app/src/main/res/layout/activity_dialog.xml" value="0.33" />
         <entry key="..\:/Users/most1/AndroidStudioProjects/MyChats/app/src/main/res/layout/activity_main.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/most1/AndroidStudioProjects/MyChats/app/src/main/res/layout/custom_menu.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/most1/AndroidStudioProjects/MyChats/app/src/main/res/layout/item_list.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/most1/AndroidStudioProjects/MyChats/app/src/main/res/layout/item_list_message.xml" value="0.36666666666666664" />
+        <entry key="..\:/Users/most1/AndroidStudioProjects/MyChats/app/src/main/res/layout/item_list_message.xml" value="0.5" />
         <entry key="..\:/Users/most1/AndroidStudioProjects/MyChats/app/src/main/res/layout/item_list_new_message.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/most1/AppData/Local/Android/Sdk/platforms/android-32/data/res/layout/simple_list_item_1.xml" value="0.36666666666666664" />
       </map>
