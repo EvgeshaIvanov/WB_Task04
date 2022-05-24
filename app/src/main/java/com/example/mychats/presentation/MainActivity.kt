@@ -14,7 +14,8 @@ import com.example.mychats.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
     /*
     TODO 1) добавить удаление сообщений (думаю через удерживание)
-
+    TODO 2) если пришло уведомление, то сообщение должно быть последним именно от пользователя
+    TODO 3) попробовать добавить время к сообщениям в чатах (рандомное)
      */
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
