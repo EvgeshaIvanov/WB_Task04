@@ -6,11 +6,11 @@ data class ChatData(
     val message: String = "",
     val photo: String = "",
     var readState: Boolean = true,
-    var text: String = "",
+    var text: String? = null,
     var time: String = "",
     var userMessage: Boolean = false
-){
-    companion object{
+) {
+    companion object {
         const val UNDEFINED_ID = -1
     }
 }

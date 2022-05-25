@@ -1,6 +1,7 @@
 package com.example.mychats.presentation
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -8,15 +9,12 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mychats.R
 import com.example.mychats.databinding.ActivityMainBinding
 
 
 class MainActivity : AppCompatActivity() {
-    /*
-    TODO 1) добавить удаление сообщений (думаю через удерживание)
-    TODO 2) если пришло уведомление, то сообщение должно быть последним именно от пользователя
-    TODO 3) попробовать добавить время к сообщениям в чатах (рандомное)
-     */
+
     private lateinit var viewModel: MainViewModel
     private lateinit var binding: ActivityMainBinding
     private lateinit var chatsAdapter: ChatsAdapter
@@ -27,6 +25,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setupRecyclerView()
         scrollListener()
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.statusBarColor = getColor(R.color.black)
+        }
+
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.chatList.observe(this) {

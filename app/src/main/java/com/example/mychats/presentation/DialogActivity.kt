@@ -1,6 +1,7 @@
 package com.example.mychats.presentation
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,9 @@ class DialogActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityDialogBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            window.statusBarColor = getColor(R.color.telegramm_user_message)
+        }
         setSupportActionBar(binding.myToolBar)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         val name = intent.getStringExtra("user_name")
@@ -41,16 +45,17 @@ class DialogActivity : AppCompatActivity() {
         binding.sendMessageButton.setOnClickListener {
             if (binding.editMessageText.text.isNotEmpty()) {
                 viewModel.sendMessage(binding.editMessageText.text.toString())
-                binding.editMessageText.setText("")
+                binding.editMessageText.text = null
             }
-            dialogAdapter.notifyItemRangeInserted(0,9)
+
             binding.recyclerViewDialogs.smoothScrollToPosition(dialogAdapter.itemCount)
         }
         binding.arrowBack.setOnClickListener {
             startActivity(Intent(this, MainActivity::class.java))
         }
-
     }
+
+
 
     private fun setUserImage(photo: String?) {
         if (photo != null) {
@@ -83,6 +88,9 @@ class DialogActivity : AppCompatActivity() {
         }
 
     }
+
+
+
 
     private fun scrollListener() {
         binding.recyclerViewDialogs.addOnScrollListener(object : RecyclerView.OnScrollListener() {

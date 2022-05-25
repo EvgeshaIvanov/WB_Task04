@@ -23,6 +23,8 @@ class MainViewModel : ViewModel() {
 
     private val addSomeMessagesUseCase = AddSomeMessagesUseCase(repository)
 
+    private val deleteMessageUseCase = DeleteMessageUseCase(repository)
+
 
     val chatList = MutableLiveData<List<ChatData>>()
 
@@ -53,7 +55,6 @@ class MainViewModel : ViewModel() {
     fun getMessages() {
         val list = getMessagesUseCase.getMessages()
         dialogsList.value = list
-
     }
 
     fun sendMessage(text: String) {
@@ -66,5 +67,8 @@ class MainViewModel : ViewModel() {
         dialogsList.value = list
     }
 
+    fun deleteMessageUseCase(message: String) {
+        deleteMessageUseCase.deleteMessage(message)
+    }
 
 }

@@ -5,7 +5,11 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
+import com.example.mychats.R
 import com.example.mychats.databinding.ItemListMessageBinding
 import com.example.mychats.domain.ChatData
 
@@ -35,12 +39,86 @@ class DialogAdapter : RecyclerView.Adapter<DialogViewHolder>() {
             with(viewHolder) {
                 blockYourMessage.visibility = View.GONE
                 chatUserMessage.text = message.text
+                timeUserMessage.text = getRandomTime()
             }
         } else {
             with(viewHolder) {
                 blockUserMessage.visibility = View.GONE
                 chatYourMessage.text = message.text
+                timeYourMessage.text = getRandomTime()
             }
+        }
+
+        blockYourMessageClickListener(viewHolder, message)
+
+        blockUserMessageClickListener(viewHolder, message)
+    }
+
+    private fun blockUserMessageClickListener(
+        viewHolder: DialogViewHolder,
+        message: ChatData
+    ) {
+        viewHolder.blockUserMessage.setOnLongClickListener {
+            onLongClickListener?.invoke(message)
+            it.startAnimation(
+                AnimationUtils.loadAnimation(
+                    viewHolder.itemView.context,
+                    R.anim.animtation_click
+                )
+            )
+            val popup = PopupMenu(viewHolder.itemView.context, it)
+            popup.inflate(R.menu.options_menu)
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.delete_item -> {
+                        Toast.makeText(viewHolder.itemView.context, "Soon", Toast.LENGTH_SHORT)
+                            .show()
+                        true
+                    }
+                    R.id.change_text_item -> {
+                        Toast.makeText(viewHolder.itemView.context, "Soon", Toast.LENGTH_SHORT)
+                            .show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popup.show()
+            true
+        }
+    }
+
+    private fun blockYourMessageClickListener(
+        viewHolder: DialogViewHolder,
+        message: ChatData
+    ) {
+        viewHolder.blockYourMessage.setOnLongClickListener {
+            onLongClickListener?.invoke(message)
+            it.startAnimation(
+                AnimationUtils.loadAnimation(
+                    viewHolder.itemView.context,
+                    R.anim.animtation_click
+                )
+            )
+            val popup = PopupMenu(viewHolder.itemView.context, it)
+            popup.inflate(R.menu.options_menu)
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.delete_item -> {
+                        Toast.makeText(viewHolder.itemView.context, "Soon", Toast.LENGTH_SHORT)
+                            .show()
+                        true
+                    }
+                    R.id.change_text_item -> {
+                        Toast.makeText(viewHolder.itemView.context, "Soon", Toast.LENGTH_SHORT)
+                            .show()
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popup.show()
+            true
         }
     }
 
@@ -54,6 +132,12 @@ class DialogAdapter : RecyclerView.Adapter<DialogViewHolder>() {
     }
 
     override fun getItemCount(): Int = list.size
+
+    private fun getRandomTime(): String {
+        val hours = (10..23).random()
+        val minutes = (10..59).random()
+        return "$hours:$minutes"
+    }
 
     companion object {
         const val VIEW_YOUR_MESSAGE = 0

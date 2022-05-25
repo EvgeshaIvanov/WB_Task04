@@ -4,4 +4,7 @@
     <string name="user_string_info">User</string>
     <string name="message_text_view">Сообщение</string>
     <string name="send_button">Send</string>
+    <string name="time_text">12.00</string>
+    <string name="delete_menu_text">Удалить</string>
+    <string name="change_text_menu">Редактировать</string>
 </resources>

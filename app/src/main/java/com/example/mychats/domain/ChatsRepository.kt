@@ -16,4 +16,6 @@ interface ChatsRepository {
 
     fun addSomeMessages(): List<ChatData>
 
+    fun deleteMessage(message: String)
+
 }

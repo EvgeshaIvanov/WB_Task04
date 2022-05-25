@@ -8,6 +8,9 @@ import com.example.mychats.databinding.ItemListMessageBinding
 class DialogViewHolder(binding: ItemListMessageBinding) : RecyclerView.ViewHolder(binding.root) {
     val blockUserMessage: CardView = binding.viewUserMessage
     val chatUserMessage: TextView = binding.userMessageText
+    val timeUserMessage: TextView = binding.timeOfUserMessage
     val blockYourMessage: CardView = binding.viewYourMessage
     val chatYourMessage: TextView = binding.yourMessageText
+    val timeYourMessage: TextView = binding.timeOfYourMessage
+
 }
